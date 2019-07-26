@@ -1,6 +1,6 @@
 import { Decoder, map } from "../src/decoder";
 
-describe('test decoder', () => {
+describe('test decoder functor', () => {
 
     const myLength: Decoder<number> = (s: string) => s.length;
     const even = (n: number) => n % 2 === 0;

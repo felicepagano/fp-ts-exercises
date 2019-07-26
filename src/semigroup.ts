@@ -33,12 +33,28 @@ export class ObjectSemigroup implements Semigroup<object> {
 
 export type Predicate<A> = (a: A) => boolean;
 
-const getPredicateSemigroup = <A>(
+// l'insieme sostegno A in questo caso dovrebbe essere boolean. dato un semigruppo di boolean,
+// viene restituito un semigruppo di predicate. il semigruppo S viene usato per combinare i due
+// predicati.
+export const getPredicateSemigroup = <A>(
   S: Semigroup<boolean>
 ): Semigroup<Predicate<A>> => ({
   concat: (x, y) => a => S.concat(x(a), y(a)),
 });
 
-const pippo = getPredicateSemigroup(booleanSemigroupAnd);
-const lenght: Predicate<string> = (s: string) => s.length % 2 === 0;
-// pippo.concat(lenght, lenght)("pippo");
+export const gT0 = (s: string) => s.length > 0;
+export const lT10 = (s: string) => s.length < 10;
+
+// ad esempio posso usare l'&& logico per combinare il risultato di due predicati come
+// maggiore di 0 e minore di 10. getPredicateSemigroup applicherà la logica di combine
+// di booleanSemigroupAnd e la applicherà ai risultati dei due predicati applicati alla
+// stringa passata.
+export const stringGT0AndLT10 = getPredicateSemigroup<string>(
+  booleanSemigroupAnd
+).concat(gT0, lT10);
+
+export const freeSemigroup = <A>(): Semigroup<A[]> => ({
+  concat: (x, y) => x.concat(y),
+});
+
+export const freeSemigroupStringInstance = freeSemigroup<string>();

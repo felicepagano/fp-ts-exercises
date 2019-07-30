@@ -58,3 +58,24 @@ export const freeSemigroup = <A>(): Semigroup<A[]> => ({
 });
 
 export const freeSemigroupStringInstance = freeSemigroup<string>();
+
+//dati due semigruppi, restituisci il semigruppo "prodotto" (tupla)
+export const getProductSemiGroup = <A, B>(
+  A: Semigroup<A>,
+  B: Semigroup<B>
+): Semigroup<[A, B]> => ({
+  concat: ([ax, bx], [ay, by]) => [A.concat(ax, ay), B.concat(bx, by)],
+});
+
+export type Tuple<A, B> = [A, B];
+//dati due semigruppi, restituisci il semigruppo "prodotto" (tupla)
+export const getProductSemiGroupTuple = <A, B>(
+  A: Semigroup<A>,
+  B: Semigroup<B>
+): Semigroup<Tuple<A, B>> => ({
+  concat: (a, b) => [
+    // ricorda, ogni tupla è formata dalla coppia A,B. ecco perchè le A sono sempre a posizione 0 e le B a posizione 1
+    A.concat(a[0], b[0]),
+    B.concat(a[1], b[1]),
+  ],
+});
